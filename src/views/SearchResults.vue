@@ -27,7 +27,7 @@
   </div>
   <ul class="pagination">
     <li><a @click="prevPage" :disabled="page === 1" href="#">«</a></li>
-    <li v-for="pageNumber in maxPage" :key="pageNumber" :class="{ 'current': page === pageNumber }">
+    <li v-for="pageNumber in maxPage" :key="pageNumber" :class="{ 'current': currentPage === pageNumber }">
       <a @click="changePage(pageNumber)" href="#">{{ pageNumber }}</a>
     </li>
     <li><a @click="nextPage" :disabled="page === maxPage" href="#">»</a></li>
@@ -56,11 +56,9 @@ export default {
     }    
   },
   methods: {
-    prevPage() {
-      // prev page
-    },
-    nextPage() {
-      // next page  
+    changePage(pageNumber) {
+      this.currentPage = pageNumber;
+      console.log(pageNumber)
     },
     fetchResults(keyword) {
       // mock data
@@ -73,12 +71,12 @@ export default {
         });
       }
 
+
       this.results = fakeResults;
     }
   }
 }
 </script>
-
 <style>
 
 .result-container{
@@ -186,11 +184,12 @@ export default {
   }
 
   .pagination a:hover {
-    background-color: #f0f0f0;
+    background-color: #1cb882;
   }
 
   .pagination .current {
     background-color: #6c6c6c;
     color: #fff;
+    padding: 8px 0px;
   }
 </style>
