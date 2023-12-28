@@ -1,23 +1,11 @@
 <template>
-    <SearchContainer />
+    <router-view/>
 </template>
 
-<script>
-import SearchContainer from './components/SearchContainer.vue';
-
-export default {
-  name: 'App',
-  components: {
-    SearchContainer,
-  },
-};
-</script>
-
 <style>
-    #app {
-      text-align: center;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 20px;
-      border-radius: 10px;
+    body {
+      background: rgb(33, 34, 37);
+      height: 100%;
+      margin: 0;
     }
 </style>

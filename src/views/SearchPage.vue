@@ -1,11 +1,32 @@
 <template>
-  <div id="search-container">
-    <button id="search-icon-google" @click="search">🔍</button>
-    <input id="search-input-google" type="text" v-model="searchQuery" @keydown.enter.prevent="search" placeholder="Search wikimedia change history">
+  <div class="container">
+  <SearchBar/>
   </div>
 </template>
 
+<script>
+import SearchBar from '../components/SearchBar.vue';
+
+export default {
+  components: {
+    SearchBar,
+  },
+};
+</script>
+
 <style>
+    .container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('./src/assets/image/wikimedia_logo.png') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     form {
       display: flex;
       justify-content: center;
@@ -78,19 +99,3 @@
       outline: none;
     }
 </style>
-
-<script>
-export default {
-  data() {
-    return {
-      searchQuery: '',
-    };
-  },
-  methods: {
-    search() {
-      console.log('API call with search query:', this.searchQuery);
-
-    },
-  },
-};
-</script>
