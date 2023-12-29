@@ -8,20 +8,20 @@
 
   <div class="result-container">
         <div class="search-time">
-          <p style="text-align: left;   color: rgba(180, 185, 190);">約有 3,140,000 項結果 (搜尋時間：0.39 秒) </p>
+          <p style="text-align: left;   color: rgba(180, 185, 190);"> About {{ resultCount }} results (Search time: {{ searchTime }} seconds)</p>
         </div>
-        <div class="search-item" v-for="item in results" :key="item.title">
+        <div class="search-item" v-for="item in results.records" :key="item.title">
           <div class="website-info-header">
             <img class="icon" src="../assets/earth-search-item.svg" alt="Icon">
             <div class="text-container">
-              <p class="domain-name">domain</p>
-              <p class="domain-url">https://www.freecodecamp.org</p>
+              <p class="domain-name">{{item.domainName}}</p>
+              <p class="domain-url">{{item.domainUrl}}</p>
             </div>
           </div>
 
           <div class="website-info-content">
-            <h3 class="item-title"><a style="color: rgba(117,163,244);" :href="item.url">{{ item.title }}</a></h3>
-            <p class="item-content">{{ item.snippet }}</p>
+            <h3 class="item-title"><a style="color: rgba(117,163,244);" :href="item.titleUrl">{{ item.title }}</a></h3>
+            <p class="item-content">{{ item.comment }}</p>
           </div>
         </div>
   </div>
@@ -36,43 +36,52 @@
 
 <script>
 import SearchBar from '../components/SearchBar.vue';
+import axios from 'axios';
 
 export default {
   components: {
     SearchBar,
   },
   mounted() {
-    const receivedKeyword = this.$route.query.query;
-    console.log('Received Query:', receivedKeyword);
+    this.keyword = this.$route.query.query;
+    console.log('Received Query:', this.keyword);
 
-    this.fetchResults(receivedKeyword);
+    this.fetchResults(this.keyword);
   },
 
   data() {
     return {
       results: [],
-      page: 1,
-      maxPage: 10  
+      keyword: '',
+      currentPage: 1,
+      size: 10,
+      maxPage: 10,
+      resultCount: 0
     }    
   },
   methods: {
-    changePage(pageNumber) {
+    async changePage(pageNumber) {
       this.currentPage = pageNumber;
-      console.log(pageNumber)
+
+      await this.fetchResults();
     },
-    fetchResults(keyword) {
-      // mock data
-      const fakeResults = [];
-      for (let i = 0; i < 10; i++) {
-        fakeResults.push({
-          title: `Result ${i + 1}`,
-          url: `https://example.com/${i}`,
-          snippet: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
+    async fetchResults() {
+      try {
+        const response = await axios.post(`http://localhost:8081/api/search`, {
+          keyword: this.keyword,
+          page: this.currentPage,
+          size: this.size,
         });
+
+
+        this.results = response.data;
+        this.maxPage = Math.floor(response.data.totalSize / this.size)
+        this.resultCount = response.data.totalSize
+        this.searchTime = response.data.queryTime / 1000
+
+      } catch (error) {
+        console.error('Error fetching results:', error);
       }
-
-
-      this.results = fakeResults;
     }
   }
 }

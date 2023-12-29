@@ -17,7 +17,6 @@
       search() {
         console.log('API call with search query:', this.searcKeyword);
         this.$router.push({ name: 'results', query: { query: this.searcKeyword} });
-
       },
     },
   };
